@@ -20,7 +20,7 @@ func main() {
 func initVault() (*vault.Client, context.Context) {
 	ctx := context.Background()
 
-	cred, err := azidentity.NewDefaultAzureCredential(nil); if err != nil {
+	cred, err := azidentity.NewManagedIdentityCredential(nil); if err != nil {
 		log.Printf("Error on getting Azure Token: %s", err)
 	}
 	var scopes []string
