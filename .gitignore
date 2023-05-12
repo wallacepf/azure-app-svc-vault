@@ -1,4 +1,5 @@
 .terraform
-*.tfstate
-*.tfstate.backup
+*tfstate*
 *.lock.hcl
+*.tfvars
+misc.sh
