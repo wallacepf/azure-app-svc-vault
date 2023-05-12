@@ -42,12 +42,14 @@ func initVault() (*vault.Client, context.Context) {
 
 	defaultRequest := schema.AzureLoginRequest{
 		Jwt: token.Token,
-		// ResourceGroupName: "MyDemoAppRG",
+		ResourceGroupName: "MyDemoAppRG",
 		Role: "myapp",
-		// SubscriptionId: "7f7602dd-85a6-4140-8501-61f2ee9f65a9",
-		// ResourceId: "/subscriptions/7f7602dd-85a6-4140-8501-61f2ee9f65a9/resourcegroups/MyDemoAppRG/providers/Microsoft.Web/sites/myapp-demo-pov",
+		SubscriptionId: "7f7602dd-85a6-4140-8501-61f2ee9f65a9",
+		ResourceId: "/subscriptions/7f7602dd-85a6-4140-8501-61f2ee9f65a9/resourcegroups/MyDemoAppRG/providers/Microsoft.Web/sites/myapp-demo-pov",
 		
 	}
+
+	fmt.Print(token.Token)
 	_, err = client.Auth.AzureLogin(
 		ctx,
 		defaultRequest,
