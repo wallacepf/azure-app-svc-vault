@@ -34,8 +34,8 @@ func initVault() (*vault.Client, context.Context) {
 	}
 
 	client, err := vault.New(
-		// vault.WithEnvironment(),
-		vault.WithAddress("http://127.0.0.1:8200"),
+		vault.WithEnvironment(),
+		// vault.WithAddress("http://127.0.0.1:8200"),
 	); if err != nil {
 		log.Fatalf("Cannot connect to the Vault Instance: %s", err)
 	}
@@ -52,7 +52,7 @@ func initVault() (*vault.Client, context.Context) {
 		ctx,
 		defaultRequest,
 	); if err != nil {
-		log.Fatalf("Error when loggin in Vault with Azure Creds: %s", err)
+		log.Fatalf("Error loggin on Vault with Azure Creds: %s", err)
 	}
 
 	return client, ctx
