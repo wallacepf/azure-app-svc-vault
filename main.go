@@ -19,8 +19,10 @@ func main() {
 
 func initVault() (*vault.Client, context.Context) {
 	ctx := context.Background()
-
-	cred, err := azidentity.NewManagedIdentityCredential(nil); if err != nil {
+	// clientID := azidentity.ClientID("18aad86a-2514-482e-a7d4-b56d5890eece")
+	// opts := azidentity.ManagedIdentityCredentialOptions{ID: clientID}
+	cred, err := azidentity.NewDefaultAzureCredential(nil); if err != nil {
+	// cred, err := azidentity.NewManagedIdentityCredential(&opts); if err != nil {
 		log.Printf("Error on getting Azure Token: %s", err)
 	}
 	var scopes []string
@@ -46,7 +48,6 @@ func initVault() (*vault.Client, context.Context) {
 		Role: "myapp",
 		SubscriptionId: "7f7602dd-85a6-4140-8501-61f2ee9f65a9",
 		ResourceId: "/subscriptions/7f7602dd-85a6-4140-8501-61f2ee9f65a9/resourcegroups/MyDemoAppRG/providers/Microsoft.Web/sites/myapp-demo-pov",
-		
 	}
 
 	fmt.Print(token.Token)
@@ -62,7 +63,7 @@ func initVault() (*vault.Client, context.Context) {
 
 func secretsVault(w http.ResponseWriter, r *http.Request) {
 	client, ctx := initVault()
-	s, err := client.Secrets.KvV2Read(ctx, "my-secrets/poc-interbank"); if err != nil {
+	s, err := client.Secrets.KvV2Read(ctx, "my-secrets/poc"); if err != nil {
 		log.Fatalf("Error when reading the secret: %s", err)
 	}
 	fmt.Fprintf(w, "Your Secret is:%s", s.Data.Data)
