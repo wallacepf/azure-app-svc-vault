@@ -62,7 +62,7 @@ func initVault() (*vault.Client, context.Context) {
 
 func secretsVault(w http.ResponseWriter, r *http.Request) {
 	client, ctx := initVault()
-	s, err := client.Secrets.KvV2Read(ctx, "secret/mysecret"); if err != nil {
+	s, err := client.Secrets.KvV2Read(ctx, "mysecret"); if err != nil {
 		log.Fatalf("Error when reading the secret: %s", err)
 	}
 	fmt.Fprintf(w, "Your Secret is:%s", s.Data.Data)
