@@ -41,6 +41,8 @@ func initVault() (*vault.Client, context.Context) {
 		log.Fatalf("Cannot connect to the Vault Instance: %s", err)
 	}
 
+	fmt.Print(token.Token)
+
 	defaultRequest := schema.AzureLoginRequest{
 		Jwt: token.Token,
 		ResourceGroupName: os.Getenv("RG_NAME"),
@@ -49,20 +51,20 @@ func initVault() (*vault.Client, context.Context) {
 		ResourceId: "/subscriptions/7f7602dd-85a6-4140-8501-61f2ee9f65a9/resourceGroups/demorg/providers/Microsoft.Web/sites/myapp-demo-pov",
 	}
 
-	fmt.Print(token.Token)
 	_, err = client.Auth.AzureLogin(
 		ctx,
 		defaultRequest,
 	); if err != nil {
 		log.Fatalf("Error loggin on Vault with Azure Creds: %s", err)
 	}
+	fmt.Printf("Logged on Vault")
 
 	return client, ctx
 }
 
 func secretsVault(w http.ResponseWriter, r *http.Request) {
 	client, ctx := initVault()
-	s, err := client.Secrets.KvV2Read(ctx, "mysecret"); if err != nil {
+	s, err := client.Secrets.KvV2Read(ctx, "mysecret", vault.WithMountPath("secret")); if err != nil {
 		log.Fatalf("Error when reading the secret: %s", err)
 	}
 	fmt.Fprintf(w, "Your Secret is:%s", s.Data.Data)
