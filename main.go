@@ -18,7 +18,7 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 }
 
-func initVault() (*vault.Client, context.Context) {
+func initVault() (*vault.Response[schema.KvV2ReadResponse]) {
 	ctx := context.Background()
 
 	cred, err := azidentity.NewDefaultAzureCredential(nil); if err != nil {
@@ -59,13 +59,15 @@ func initVault() (*vault.Client, context.Context) {
 	}
 	fmt.Printf("Logged on Vault")
 
-	return client, ctx
-}
-
-func secretsVault(w http.ResponseWriter, r *http.Request) {
-	client, ctx := initVault()
 	s, err := client.Secrets.KvV2Read(ctx, "mysecret", vault.WithMountPath("secret")); if err != nil {
 		log.Fatalf("Error when reading the secret: %s", err)
 	}
+
+	return s
+}
+
+func secretsVault(w http.ResponseWriter, r *http.Request) {
+	s := initVault()
+
 	fmt.Fprintf(w, "Your Secret is:%s", s.Data.Data)
 }
