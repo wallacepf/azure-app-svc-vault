@@ -51,13 +51,17 @@ func initVault() (*vault.Response[schema.KvV2ReadResponse]) {
 		ResourceId: "/subscriptions/7f7602dd-85a6-4140-8501-61f2ee9f65a9/resourceGroups/demorg/providers/Microsoft.Web/sites/myapp-demo-pov",
 	}
 
-	_, err = client.Auth.AzureLogin(
+	r, err := client.Auth.AzureLogin(
 		ctx,
 		defaultRequest,
 	); if err != nil {
 		log.Fatalf("Error loggin on Vault with Azure Creds: %s", err)
 	}
 	log.Printf("Logged on Vault")
+
+	if err := client.SetToken(r.Auth.ClientToken); err != nil {
+		log.Fatal(err)
+	}
 
 	s, err := client.Secrets.KvV2Read(ctx, "mysecret", vault.WithMountPath("secret")); if err != nil {
 		log.Fatalf("Error when reading the secret: %s", err)
