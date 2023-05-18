@@ -41,7 +41,7 @@ func initVault() (*vault.Response[schema.KvV2ReadResponse]) {
 		log.Fatalf("Cannot connect to the Vault Instance: %s", err)
 	}
 
-	fmt.Print(token.Token)
+	log.Print(token.Token)
 
 	defaultRequest := schema.AzureLoginRequest{
 		Jwt: token.Token,
@@ -57,7 +57,7 @@ func initVault() (*vault.Response[schema.KvV2ReadResponse]) {
 	); if err != nil {
 		log.Fatalf("Error loggin on Vault with Azure Creds: %s", err)
 	}
-	fmt.Printf("Logged on Vault")
+	log.Printf("Logged on Vault")
 
 	s, err := client.Secrets.KvV2Read(ctx, "mysecret", vault.WithMountPath("secret")); if err != nil {
 		log.Fatalf("Error when reading the secret: %s", err)
@@ -68,6 +68,5 @@ func initVault() (*vault.Response[schema.KvV2ReadResponse]) {
 
 func secretsVault(w http.ResponseWriter, r *http.Request) {
 	s := initVault()
-
 	fmt.Fprintf(w, "Your Secret is:%s", s.Data.Data)
 }
